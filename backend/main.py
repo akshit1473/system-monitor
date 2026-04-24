@@ -1,24 +1,63 @@
 from fastapi import FastAPI
 import subprocess
 import json
+import time
+from datetime import datetime
+
 
 app = FastAPI()
 
 def run_script(script):
+    start = time.time()
+
     result = subprocess.run(
         ["bash", script, "--json"],
         capture_output=True,
         text=True
     )
 
+    duration = int((time.time() - start) * 1000)
+
     if result.returncode != 0:
-        return {"status": "error", "error": result.stderr}
+        return {
+            "execution": {
+                "status": "error",
+                "time_ms": duration
+            },
+            "meta": {
+                "script": script,
+                "timestamp": datetime.utcnow().isoformat()
+            },
+            "error": result.stderr
+        }
 
     try:
-        return json.loads(result.stdout)
-    except:
-        return {"status": "error", "raw": result.stdout}
+        parsed = json.loads(result.stdout)
 
+        return {
+            "execution": {
+                "status": "success",
+                "time_ms": duration
+            },
+            "meta": {
+                "script": script,
+                "timestamp": datetime.utcnow().isoformat()
+            },
+            "data": parsed.get("data", parsed)
+        }
+
+    except:
+        return {
+            "execution": {
+                "status": "parse_error",
+                "time_ms": duration
+            },
+            "meta": {
+                "script": script,
+                "timestamp": datetime.utcnow().isoformat()
+            },
+            "raw": result.stdout
+        }
 
 @app.get("/")
 def root():
