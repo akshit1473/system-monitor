@@ -1,0 +1,12 @@
+INFO user logged in from 192.168.1.1
+ERROR failed login from 192.168.1.1
+WARNING disk almost full
+INFO connection from 10.0.0.5
+ERROR failed login from 192.168.1.1
+ERROR failed login from 10.0.0.5
+INFO user logged in from 172.16.0.2
+WARNING cpu usage high
+ERROR failed login from 192.168.1.1
+INFO request from 10.0.0.5
+FAILED password attempt from 192.168.1.1
+INFO login success from 172.16.0.2
