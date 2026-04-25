@@ -1,11 +1,11 @@
 # system-monitor
 
 A Linux system monitoring dashboard built from scratch.
-Bash scripts handle all data collection — a FastAPI backend
+Bash scripts handle all data collection -> a FastAPI backend
 exposes the results as JSON endpoints.
 
-Built as a practical DevSecOps learning project. Every script
-was written with a security lens — not just what the system
+Built as a practical DevOps/security learning project. Every script
+was written with a security lens -> not just what the system
 is doing, but what an attacker could do with that information.
 
 ---
