@@ -22,5 +22,86 @@ Each script supports a `--json` flag for structured output,
 consumed by the FastAPI backend.
 
 ---
+The bash scripts do the actual work. FastAPI just exposes
+their output over HTTP. This keeps the system modular —
+scripts can be run standalone or via the API.
 
-## Architecture
+---
+
+## Setup
+
+**Requirements:**
+- Linux (Ubuntu 20.04+)
+- Python 3.8+
+- bash
+
+**Install dependencies:**
+```bash
+pip install -r requirements.txt
+```
+
+**Run the API:**
+```bash
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Test endpoints:**
+```bash
+curl http://localhost:8000/audit
+curl http://localhost:8000/monitor
+```
+
+**Interactive API docs** — open in browser after starting the server:
+---
+---
+
+## Run scripts standalone
+
+```bash
+# CLI output
+bash scripts/path_auditor.sh
+bash scripts/process_monitor.sh
+
+# JSON output (consumed by FastAPI)
+bash scripts/path_auditor.sh --json
+bash scripts/process_monitor.sh --json
+
+# Log parser
+bash scripts/log_parser.sh /path/to/logfile.log
+```
+
+---
+
+## Security notes
+
+`path_auditor.sh` flags these conditions as risks:
+- Current directory `.` present in PATH
+- Empty PATH entries (implicit current directory)
+- Directories not owned by root
+
+`process_monitor.sh` detects zombie processes — processes
+that have completed execution but haven't been reaped by
+their parent, which can exhaust the system's PID table.
+
+Both scripts set a hardened internal PATH before execution
+to prevent PATH hijacking attacks against the scripts themselves.
+
+---
+
+## Status
+
+| Component | Status |
+|---|---|
+| path_auditor.sh | Complete — CLI + JSON output |
+| process_monitor.sh | Complete — CLI + JSON output, zombie detection |
+| log_parser.sh | In progress |
+| FastAPI backend | In progress |
+| Live deployment | Upcoming |
+
+---
+
+## Part of
+
+This project is part of a broader Linux systems learning
+repository: [linux-devsec-foundations](https://github.com/akshit1473/linux-devsec-foundations)
+
