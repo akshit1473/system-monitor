@@ -1,11 +1,11 @@
 # system-monitor
 
 A Linux system monitoring dashboard built from scratch.
-Bash scripts handle all data collection -> a FastAPI backend
+Bash scripts handle all data collection — a FastAPI backend
 exposes the results as JSON endpoints.
 
 Built as a practical DevSecOps learning project. Every script
-was written with a security lens -> not just what the system
+was written with a security lens — not just what the system
 is doing, but what an attacker could do with that information.
 
 ---
@@ -22,10 +22,33 @@ Each script supports a `--json` flag for structured output,
 consumed by the FastAPI backend.
 
 ---
+
+## Architecture
+
+bash scripts (data collection)
+-> --json flag
+FastAPI backend (HTTP API layer)
+-> GET endpoints
+/audit    /monitor    /docs
+
 The bash scripts do the actual work. FastAPI just exposes
-their output over HTTP. This keeps the system modular —
+their output over HTTP. This keeps the system modular ->
 scripts can be run standalone or via the API.
 
+---
+
+## Project structure
+
+    system-monitor/
+    ├── backend/
+    │   └── main.py          ← FastAPI app, subprocess integration
+    ├── scripts/
+    │   ├── path_auditor.sh  ← PATH security audit, JSON output
+    │   ├── process_monitor.sh ← process monitoring, zombie detection
+    │   └── log_parser.sh    ← log analysis and IP extraction
+    ├── .gitignore
+    ├── requirements.txt
+    └── README.md
 ---
 
 ## Setup
@@ -52,7 +75,8 @@ curl http://localhost:8000/monitor
 ```
 
 **Interactive API docs** — open in browser after starting the server:
----
+http://localhost:8000/docs
+
 ---
 
 ## Run scripts standalone
@@ -92,9 +116,9 @@ to prevent PATH hijacking attacks against the scripts themselves.
 
 | Component | Status |
 |---|---|
-| path_auditor.sh | Complete — CLI + JSON output |
-| process_monitor.sh | Complete — CLI + JSON output, zombie detection |
-| log_parser.sh | In progress |
+| `path_auditor.sh` | Complete — CLI + JSON output |
+| `process_monitor.sh` | Complete — CLI + JSON output, zombie detection |
+| `log_parser.sh` | In progress |
 | FastAPI backend | In progress |
 | Live deployment | Upcoming |
 
@@ -104,4 +128,3 @@ to prevent PATH hijacking attacks against the scripts themselves.
 
 This project is part of a broader Linux systems learning
 repository: [linux-devsec-foundations](https://github.com/akshit1473/linux-devsec-foundations)
-
