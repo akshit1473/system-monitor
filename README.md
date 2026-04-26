@@ -54,7 +54,7 @@ scripts can be run standalone or via the API.
 ## Setup
 
 **Requirements:**
-- Linux (Ubuntu 20.04+)
+- Linux (Ubuntu 20 . 04+)
 - Python 3.8+
 - bash
 
@@ -124,7 +124,4 @@ to prevent PATH hijacking attacks against the scripts themselves.
 
 ---
 
-## Part of
 
-This project is part of a broader Linux systems learning
-repository: [linux-devsec-foundations](https://github.com/akshit1473/linux-devsec-foundations)
