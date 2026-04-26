@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi import Query
 import subprocess
 import json
 import time
@@ -64,6 +65,26 @@ def root():
     return {"status": "working"}
 
 
-@app.get("/api/path")
+@app.get("/api/audit/path")
 def path():
     return run_script("scripts/path_auditor.sh")
+
+
+
+@app.get("/api/analyze/logs")
+def analyze_logs(logfile: str = Query(...)):
+    return run_script("scripts/log_parser.sh", [logfile])
+
+@app.get("/api/monitor/process")
+def path():
+    return run_script("scripts/process_monitor.sh")
+
+@app.get("/api/summary")
+def summary():
+    path = run_script("scripts/path_auditor.sh")
+    process = run_script("scripts/process_monitor.sh")
+
+    return {
+        "path": path,
+        "process": process
+    }
