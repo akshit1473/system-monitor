@@ -66,8 +66,9 @@ def root():
 
 @app.get("/api/audit/path")
 def path():
-    return run_script("scripts/path_auditor.sh")
-
+    raw = run_script("scripts/path_auditor.sh")
+    processed = analyze_risk(raw)
+    return processed
 
 
 @app.get("/api/analyze/logs")
@@ -80,10 +81,12 @@ def path():
 
 @app.get("/api/summary")
 def summary():
-    path = run_script("scripts/path_auditor.sh")
-    process = run_script("scripts/process_monitor.sh")
+    path_raw = run_script("scripts/path_auditor.sh")
+    process_raw = run_script("scripts/process_monitor.sh")
 
     return {
-        "path": path,
-        "process": process
+        "path": analyze_risk(path_raw),
+        "process": analyze_risk(process_raw)
     }
+
+    
