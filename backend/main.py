@@ -7,6 +7,70 @@ from datetime import datetime
 
 app = FastAPI()
 
+def analyze_risk(raw):
+
+    if raw.get("execution", {}).get("status") != "success":
+        return {
+            "status": "error",
+            "message": "Script failed",
+            "details": raw
+        }
+
+    issues = raw.get("data", {}).get("issues", [])
+
+    score = 0
+    insights = []
+
+    for issue in issues:
+        # --- Detect severity ---
+        if issue.startswith("CRITICAL"):
+            severity = "HIGH"
+            score += 3
+        elif issue.startswith("WARN"):
+            severity = "MEDIUM"
+            score += 1
+        else:
+            severity = "LOW"
+
+        # --- Add simple explanation ---
+        if "current directory in path" in issue.lower():
+            fix = "Remove '.' from PATH"
+            impact = "Command hijacking risk"
+        elif "does not exist" in issue.lower():
+            fix = "Remove invalid PATH entry"
+            impact = "Broken configuration"
+        elif "owned by" in issue.lower():
+            fix = "Restrict directory ownership"
+            impact = "Possible privilege escalation"
+        else:
+            fix = "Check manually"
+            impact = "Unknown risk"
+
+        insights.append({
+            "issue": issue,
+            "severity": severity,
+            "impact": impact,
+            "fix": fix
+        })
+
+    # --- Normalize score ---
+    score = min(score, 10)
+
+    if score >= 5:
+        overall = "HIGH"
+    elif score >= 2:
+        overall = "MEDIUM"
+    else:
+        overall = "LOW"
+
+    return {
+        "status": "success",
+        "risk_score": score,
+        "overall_severity": overall,
+        "total_issues": len(insights),
+        "insights": insights
+    }
+
 def run_script(script):
     start = time.time()
 
