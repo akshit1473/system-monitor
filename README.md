@@ -1,4 +1,4 @@
-# System Monitor / Lightweight Linux security auditing tool exposing system risks via API
+# Lightweight Linux security auditing tool exposing system risks via API
 
 A Linux system monitoring dashboard built from scratch.
 Bash scripts handle all data collection -> a FastAPI backend
