@@ -1,5 +1,4 @@
 #!/usr/bin/bash
-
 # function no.1 
 collect_path_issues()
 {
@@ -83,7 +82,6 @@ if  [ ${#issues[@]} -eq  0 ]; then
 echo "no issues detected"
 return
 fi
-
 
 
 for i in  "${issues[@]}"; do
