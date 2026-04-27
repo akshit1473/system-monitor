@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from fastapi import Query
 import subprocess
 import json
 import time
