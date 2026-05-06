@@ -10,7 +10,7 @@ is doing, but what an attacker could do with that information.
 
 ---
 
-## What it does
+ ## What it does
 
 | Script | Function |
 |---|---|
